@@ -7,7 +7,7 @@
 
 import UIKit
 
-class HistoryViewController: UIViewController, Storyboarded  {
+class HistoryViewController: UIViewController, Storyboarded {
     
     override func viewDidLoad() {
         super.viewDidLoad()
