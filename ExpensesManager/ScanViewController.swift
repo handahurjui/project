@@ -61,7 +61,7 @@ extension ScanViewController: VNDocumentCameraViewControllerDelegate {
             self?.imageView.image = scan.imageOfPage(at: 0)
             
             guard let self = self else { return }
-            UIAlertController.present(title: "Success!", message: "Document \(scan.title) scanned with \(scan.pageCount) pages.", on: self)
+            AlertPresenter.shared.present(title: "Success!", message: "Document \(scan.title) scanned with \(scan.pageCount) pages.", on: self)
         }
     }
     
@@ -70,7 +70,7 @@ extension ScanViewController: VNDocumentCameraViewControllerDelegate {
             self?.imageView.image = nil
             
             guard let self else { return }
-            UIAlertController.present(title: "Cancelled", message: "User cancelled the scanning process.", on: self)
+            AlertPresenter.shared.present(title: "Cancelled", message: "User cancelled the scanning process.", on: self)
         }
     }
     
@@ -79,17 +79,7 @@ extension ScanViewController: VNDocumentCameraViewControllerDelegate {
             self?.imageView.image = nil
             
             guard let self else { return }
-            UIAlertController.present(title: "Error", message: error.localizedDescription, on: self)
+            AlertPresenter.shared.present(title: "Error", message: error.localizedDescription, on: self)
         }
     }
 }
-
-extension UIAlertController {
-    static func present(title: String?, message: String?, on viewController: UIViewController) {
-        let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
-        let confirm = UIAlertAction(title: "OK", style: .default)
-        alert.addAction(confirm)
-        viewController.present(alert, animated: true)
-    }
-}
-
