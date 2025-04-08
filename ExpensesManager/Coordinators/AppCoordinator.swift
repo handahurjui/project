@@ -7,7 +7,7 @@
 
 import UIKit
 
-final class AppCoordinator {
+final class AppCoordinator: Coordinator {
     
     // MARK: Properties
     let window: UIWindow?
@@ -17,7 +17,7 @@ final class AppCoordinator {
     // MARK: Coordinator
     init(window: UIWindow?) { self.window = window }
     
-    func start() {
+    override func start() {
         guard let window = window else { return }
         
         window.rootViewController = rootNavigationController

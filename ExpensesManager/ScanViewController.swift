@@ -7,7 +7,7 @@
 
 import UIKit
 
-class ScanViewController: UIViewController {
+class ScanViewController: UIViewController, Storyboarded {
 
     // MARK: - View
     override func viewDidLoad() {

@@ -7,7 +7,7 @@
 
 import UIKit
 
-class TabBarCoordinator {
+class TabBarCoordinator: Coordinator {
     
     // MARK: Properties
     private let rootNavigationController: UINavigationController
@@ -15,10 +15,10 @@ class TabBarCoordinator {
     // MARK: Coordinator
     init(rootNavigationController: UINavigationController) { self.rootNavigationController = rootNavigationController }
     
-    func start() {
+    override func start() {
         
-        let scanVC = ScanViewController()
-        let settingsVC = HistoryViewController()
+        let scanVC = ScanViewController.instantiate()
+        let settingsVC = HistoryViewController.instantiate()
         scanVC.tabBarItem = UITabBarItem(title: "Scan", image: UIImage(systemName: "camera"), selectedImage: UIImage(systemName: "camera.fill"))
         settingsVC.tabBarItem = UITabBarItem(title: "History", image: UIImage(systemName: "archivebox"), selectedImage: UIImage(systemName: "archivebox.fill"))
         
