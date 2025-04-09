@@ -9,7 +9,7 @@
 import SwiftUI
 
 struct ExpenseItemView: View {
-  let expense: Expense
+  let expense: ExpenseProtocol
 
   static let dateFormatter: DateFormatter = {
     var dateFormatter = DateFormatter()
@@ -33,3 +33,19 @@ struct ExpenseItemView: View {
         }
     }
 }
+
+struct ExpenseItemView_Previews: PreviewProvider {
+  struct PreviewExpense: ExpenseProtocol {
+    var title: String? = "Preview Item"
+    var price: Double = 123.45
+    var comment: String? = "This is a preview item"
+    var date: Date? = Date()
+      var image: Data = (UIImage(systemName: "archivebox")?.pngData())!
+    var id: UUID? = UUID()
+  }
+
+  static var previews: some View {
+    ExpenseItemView(expense: PreviewExpense())
+  }
+}
+

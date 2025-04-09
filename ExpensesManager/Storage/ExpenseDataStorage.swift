@@ -12,7 +12,7 @@ import Combine
 class ExpenseDataStorage: ObservableObject {
     
     let mainContext: NSManagedObjectContext
-    @Published var expenses: [Expense] = []
+    @Published var expenses: [ExpenseProtocol] = []
     
     init(mainContext: NSManagedObjectContext = PersistenceCoreData.shared.mainContext) {
         self.mainContext = mainContext
@@ -22,7 +22,7 @@ class ExpenseDataStorage: ObservableObject {
         expenses = fetchEntries()
     }
     
-    func fetchEntries() -> [Expense] {
+    func fetchEntries() -> [ExpenseProtocol] {
         let fetchRequest: NSFetchRequest<Expense> = Expense.fetchRequest()
         fetchRequest.sortDescriptors = [NSSortDescriptor(keyPath: \Expense.createdDate, ascending: true)]
         do {

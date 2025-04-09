@@ -21,5 +21,6 @@ extension Expense {
     @NSManaged public var image: Data?
 }
 
-extension Expense: Identifiable {
-}
+extension Expense: Identifiable { }
+
+extension Expense: ExpenseProtocol { }
