@@ -6,17 +6,11 @@
 //
 
 import SwiftUI
-
-class ExpensesHistoryViewModel: ObservableObject {
-  @Published var expenses: [Expense] = []
-
-  func loadExpenses() {
-  }
-}
+import Combine
 
 struct ExpensesHistory: View {
     
-    @ObservedObject var viewModel: ExpenseDataStorage
+    @ObservedObject var viewModel: ExpensesHistoryViewModel
     
     var body: some View {
         VStack {

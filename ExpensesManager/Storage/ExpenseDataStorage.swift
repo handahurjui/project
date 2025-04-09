@@ -6,19 +6,19 @@
 //
 
 import CoreData
-import UIKit
 import Combine
 
-class ExpenseDataStorage: ObservableObject {
+class ExpenseDataStorage: ExpensesHistoryViewModel {
     
     let mainContext: NSManagedObjectContext
-    @Published var expenses: [ExpenseProtocol] = []
+    
     
     init(mainContext: NSManagedObjectContext = PersistenceCoreData.shared.mainContext) {
         self.mainContext = mainContext
+        super.init()
         loadExpenses()
     }
-    func loadExpenses() {
+    override func loadExpenses() {
         expenses = fetchEntries()
     }
     
@@ -34,13 +34,13 @@ class ExpenseDataStorage: ObservableObject {
         }
     }
     
-    func saveEntry(title: String, description: String, image: UIImage, completion: @escaping (Result<Bool, Error>) -> ()) {
+    func saveEntry(title: String, description: String, image: Data, completion: @escaping (Result<Bool, Error>) -> ()) {
         let newItem = Expense(context: mainContext)
         newItem.title = title
         newItem.createdDate = Date()
         newItem.descriptionData = description
         newItem.id = UUID()
-        newItem.image = image.toData()
+        newItem.image = image
         saveContext{ result in
             switch result {
             case .success(let response):

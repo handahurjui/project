@@ -25,8 +25,7 @@ class HistoryViewController: UIViewController, Storyboarded {
         super.viewDidLoad()
         title = "History"
         
-//        let expenseHistoryVM = ExpensesHistoryViewModel()
-        let expenseHistoryVM = ExpenseDataStorage()
+        var expenseHistoryVM = ExpenseDataStorage()
         let listController = UIHostingController(
           rootView:
             ExpensesHistory(viewModel: expenseHistoryVM)

@@ -31,7 +31,7 @@ class ScanViewModel {
     }
     
     func saveData(title: String, description: String, image: UIImage) {
-        storage.saveEntry(title: title, description: description, image: image) { result in
+        storage.saveEntry(title: title, description: description, image: image.toData()!) { result in
             switch result {
             case .success(let response):
                 print("Successful saved")

@@ -9,14 +9,14 @@
 import SwiftUI
 
 struct ExpenseItemView: View {
-  let expense: ExpenseProtocol
-
-  static let dateFormatter: DateFormatter = {
-    var dateFormatter = DateFormatter()
-    dateFormatter.dateStyle = .medium
-    dateFormatter.timeStyle = .none
-    return dateFormatter
-  }()
+    let expense: ExpenseProtocol
+    
+    static let dateFormatter: DateFormatter = {
+        var dateFormatter = DateFormatter()
+        dateFormatter.dateStyle = .medium
+        dateFormatter.timeStyle = .none
+        return dateFormatter
+    }()
     
     var body: some View {
         VStack(alignment: .leading) {
@@ -35,17 +35,16 @@ struct ExpenseItemView: View {
 }
 
 struct ExpenseItemView_Previews: PreviewProvider {
-  struct PreviewExpense: ExpenseProtocol {
-    var title: String? = "Preview Item"
-    var price: Double = 123.45
-    var comment: String? = "This is a preview item"
-    var date: Date? = Date()
-      var image: Data = (UIImage(systemName: "archivebox")?.pngData())!
-    var id: UUID? = UUID()
-  }
-
-  static var previews: some View {
-    ExpenseItemView(expense: PreviewExpense())
-  }
+    struct PreviewExpense: ExpenseProtocol {
+        var title: String? = "Preview Title"
+        var descriptionData: String? = "Description text for preview"
+        var createdDate: Date? = Date()
+        var image: Data? = (UIImage(systemName: "archivebox")?.pngData())!
+        var id: UUID? = UUID()
+    }
+    
+    static var previews: some View {
+        ExpenseItemView(expense: PreviewExpense())
+    }
 }
 
