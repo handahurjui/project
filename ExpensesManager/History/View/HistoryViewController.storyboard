@@ -16,9 +16,28 @@
                     <view key="view" contentMode="scaleToFill" id="5EZ-qb-Rvc">
                         <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="qp2-I3-Acx">
+                                <rect key="frame" x="0.0" y="59" width="393" height="759"/>
+                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                <connections>
+                                    <outlet property="dataSource" destination="Y6W-OH-hqX" id="dB2-ap-sQx"/>
+                                    <outlet property="delegate" destination="Y6W-OH-hqX" id="obA-MD-EaH"/>
+                                </connections>
+                            </tableView>
+                        </subviews>
                         <viewLayoutGuide key="safeArea" id="vDu-zF-Fre"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <constraints>
+                            <constraint firstItem="qp2-I3-Acx" firstAttribute="leading" secondItem="vDu-zF-Fre" secondAttribute="leading" id="3dc-8a-XxF"/>
+                            <constraint firstItem="qp2-I3-Acx" firstAttribute="top" secondItem="vDu-zF-Fre" secondAttribute="top" id="IEp-O7-cbl"/>
+                            <constraint firstItem="vDu-zF-Fre" firstAttribute="bottom" secondItem="qp2-I3-Acx" secondAttribute="bottom" id="Zwp-8Y-pEA"/>
+                            <constraint firstItem="vDu-zF-Fre" firstAttribute="trailing" secondItem="qp2-I3-Acx" secondAttribute="trailing" id="h11-lV-QSY"/>
+                        </constraints>
                     </view>
+                    <connections>
+                        <outlet property="tableView" destination="qp2-I3-Acx" id="SMw-iQ-dBF"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Ief-a0-LHa" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
