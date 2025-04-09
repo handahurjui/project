@@ -8,18 +8,18 @@
 import CoreData
 import Combine
 
-class ExpenseDataStorage: ExpensesHistoryViewModel {
+protocol Storage {
+    func fetchEntries() -> [ExpenseProtocol]
+    func fetchEntry(completion: @escaping (Result<[Expense], Error>) -> ())
+    func saveEntry(title: String, description: String, image: Data, completion: @escaping (Result<Bool, Error>) -> ())
+}
+
+struct ExpenseDataStorage: Storage {
     
     let mainContext: NSManagedObjectContext
     
-    
     init(mainContext: NSManagedObjectContext = PersistenceCoreData.shared.mainContext) {
         self.mainContext = mainContext
-        super.init()
-        loadExpenses()
-    }
-    override func loadExpenses() {
-        expenses = fetchEntries()
     }
     
     func fetchEntries() -> [ExpenseProtocol] {
@@ -34,7 +34,7 @@ class ExpenseDataStorage: ExpensesHistoryViewModel {
         }
     }
     
-    func fetchEntry(completion: @escaping (Result<[Expense]?, Error>) -> ()) {
+    func fetchEntry(completion: @escaping (Result<[Expense], Error>) -> ()) {
         let fetchRequest = NSFetchRequest<Expense>(entityName: "Expense")
         
         do {
@@ -57,9 +57,7 @@ class ExpenseDataStorage: ExpensesHistoryViewModel {
             }
         }
     }
-}
-
-extension ExpenseDataStorage: SaveProtocol {
+    
     func saveEntry(title: String, description: String, image: Data, completion: @escaping (Result<Bool, Error>) -> ()) {
         let newItem = Expense(context: mainContext)
         newItem.title = title

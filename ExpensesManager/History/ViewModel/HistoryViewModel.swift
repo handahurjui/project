@@ -6,9 +6,9 @@
 //
 
 class HistoryViewModel {
-    var storage: ExpenseDataStorage
+    var storage: Storage
     
-    init(storage: ExpenseDataStorage) {
+    init(storage: Storage) {
         self.storage = storage
     }
 }

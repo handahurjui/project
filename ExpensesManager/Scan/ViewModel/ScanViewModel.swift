@@ -7,9 +7,9 @@
 import Foundation
 
 class ScanViewModel {
-    var storage: SaveProtocol
+    var storage: Storage
     
-    init(storage: SaveProtocol) {
+    init(storage: Storage) {
         self.storage = storage
     }
         
