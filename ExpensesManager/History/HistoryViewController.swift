@@ -25,10 +25,10 @@ class HistoryViewController: UIViewController, Storyboarded {
         super.viewDidLoad()
         title = "History"
         
-        var expenseHistoryVM = ExpenseDataStorage()
+        guard let vm = viewModel else { return }
         let listController = UIHostingController(
           rootView:
-            ExpensesHistory(viewModel: expenseHistoryVM)
+            ExpensesHistory(viewModel: vm.storage)
         )
         view.pinView(listController.view)
         addChild(listController)
