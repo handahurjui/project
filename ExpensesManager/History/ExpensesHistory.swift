@@ -16,15 +16,18 @@ class ExpensesHistoryViewModel: ObservableObject {
 
 struct ExpensesHistory: View {
     
-    @ObservedObject var viewModel: ExpensesHistoryViewModel
+    @ObservedObject var viewModel: ExpenseDataStorage
     
     var body: some View {
         VStack {
           List {
               ForEach(viewModel.expenses, id: \.id) { item in
-              ExpenseItemView(expense: item)
+                  ExpenseItemView(expense: item)
             }
           }
+        }
+        .onAppear {
+            viewModel.loadExpenses()
         }
     }
 }

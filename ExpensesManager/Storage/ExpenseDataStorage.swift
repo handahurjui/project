@@ -7,14 +7,31 @@
 
 import CoreData
 import UIKit
+import Combine
 
-struct ExpenseDataStorage {
+class ExpenseDataStorage: ObservableObject {
     
     let mainContext: NSManagedObjectContext
+    @Published var expenses: [Expense] = []
     
     init(mainContext: NSManagedObjectContext = PersistenceCoreData.shared.mainContext) {
         self.mainContext = mainContext
-        
+        loadExpenses()
+    }
+    func loadExpenses() {
+        expenses = fetchEntries()
+    }
+    
+    func fetchEntries() -> [Expense] {
+        let fetchRequest: NSFetchRequest<Expense> = Expense.fetchRequest()
+        fetchRequest.sortDescriptors = [NSSortDescriptor(keyPath: \Expense.createdDate, ascending: true)]
+        do {
+            let expenses = try mainContext.fetch(fetchRequest)
+            return expenses
+        } catch let error {
+            print("error fetching: \(error)")
+            return []
+        }
     }
     
     func saveEntry(title: String, description: String, image: UIImage, completion: @escaping (Result<Bool, Error>) -> ()) {

@@ -9,7 +9,14 @@
 import SwiftUI
 
 struct ExpenseItemView: View {
-    let expense: Expense
+  let expense: Expense
+
+  static let dateFormatter: DateFormatter = {
+    var dateFormatter = DateFormatter()
+    dateFormatter.dateStyle = .medium
+    dateFormatter.timeStyle = .none
+    return dateFormatter
+  }()
     
     var body: some View {
         VStack(alignment: .leading) {
@@ -19,6 +26,10 @@ struct ExpenseItemView: View {
             }
             Text(expense.descriptionData ?? "")
                 .font(.caption)
+            HStack {
+                Text("\(expense.createdDate ?? Date(), formatter: Self.dateFormatter)")
+                Spacer()
+            }
         }
     }
 }
