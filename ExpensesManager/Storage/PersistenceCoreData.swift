@@ -16,7 +16,7 @@ struct PersistenceCoreData {
     let mainContext: NSManagedObjectContext
     
     private init() {
-        container = NSPersistentContainer(name: "ExpenseManager")
+        container = NSPersistentContainer(name: "ExpensesManager")
         let description = container.persistentStoreDescriptions.first
         description?.type = NSSQLiteStoreType
         

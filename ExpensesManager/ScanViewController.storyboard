@@ -72,7 +72,7 @@
                                                         <color key="tintColor" white="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                         <state key="normal" title=" SAVE " image="square.and.arrow.down" catalog="system"/>
                                                         <connections>
-                                                            <action selector="tappedWithScan:" destination="Y6W-OH-hqX" eventType="touchUpInside" id="QDE-xR-u8y"/>
+                                                            <action selector="saveBtnTapped:" destination="Y6W-OH-hqX" eventType="touchUpInside" id="kpD-XB-ZUH"/>
                                                         </connections>
                                                     </button>
                                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="bLX-KX-hnT">
@@ -84,7 +84,7 @@
                                                         <state key="normal" title="Button"/>
                                                         <buttonConfiguration key="configuration" style="plain" image="camera.fill" catalog="system" title="TAKE PHOTO"/>
                                                         <connections>
-                                                            <action selector="tappedWithScan:" destination="Y6W-OH-hqX" eventType="touchUpInside" id="29b-Au-eln"/>
+                                                            <action selector="takePhotoBtnTappedWithScan:" destination="Y6W-OH-hqX" eventType="touchUpInside" id="z7Z-oP-YFn"/>
                                                         </connections>
                                                     </button>
                                                 </subviews>
@@ -118,7 +118,7 @@
                         <outlet property="imageView" destination="X6Q-Vf-KWz" id="Hmf-KT-cMd"/>
                         <outlet property="scanBtn" destination="drz-Gh-hsB" id="Wci-gR-gTe"/>
                         <outlet property="scrollView" destination="les-QE-q4E" id="nRY-pF-nPq"/>
-                        <outlet property="takePhotoBtn" destination="bLX-KX-hnT" id="gOV-xq-wvy"/>
+                        <outlet property="takePhotoBtn" destination="bLX-KX-hnT" id="WFv-CG-dUU"/>
                         <outlet property="titleTextField" destination="jGL-qu-gjO" id="Rmd-bP-Gxe"/>
                     </connections>
                 </viewController>

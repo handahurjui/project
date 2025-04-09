@@ -8,6 +8,33 @@
 import UIKit
 import VisionKit
 
+protocol ScanViewModelDataSource {
+    
+}
+
+class ScanViewModel {
+    var storage: ExpenseDataStorage
+    
+    init(storage: ExpenseDataStorage) {
+        self.storage = storage
+    }
+    
+    func loadData(completion: @escaping (Result<[Expense]?, Error>) -> ()) {
+        storage.fetchEntry { result in
+            switch result {
+            case .success(let response):
+                completion(.success(response))
+            case .failure(let error):
+                completion(.failure(error))
+            }
+        }
+    }
+    
+    func saveData(title: String, description: String, image: UIImage) {
+        storage.saveEntry(title: title, description: description, image: image)
+    }
+}
+
 class ScanViewController: UIViewController, Storyboarded {
 
     // MARK: - Outlets
@@ -20,6 +47,7 @@ class ScanViewController: UIViewController, Storyboarded {
     
     
     //MARK: Properties
+    var viewModel: ScanViewModel?
     private let descriptionPlaceHolderText = "Write description of your photo"
     
     // MARK: - View
@@ -32,6 +60,18 @@ class ScanViewController: UIViewController, Storyboarded {
         view.addGestureRecognizer(gestureRecognizer)
         
         configureUIViews()
+        viewModel?.loadData(completion: { result in
+            switch result {
+            case .success(let response):
+                if let item = response?.first as? Expense {
+                    self.imageView.image = UIImage(data: item.image!)
+                    self.titleTextField.text = item.title
+                    self.descriptionTextView.text = item.descriptionData
+                }
+            case .failure(let error):
+                print("could not retrieve entity")
+            }
+        })
     }
     
     private func configureUIViews() {
@@ -42,6 +82,20 @@ class ScanViewController: UIViewController, Storyboarded {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        viewModel?.loadData(completion: { result in
+            switch result {
+            case .success(let response):
+                if let item = response?.first as? Expense {
+                    self.imageView.image = UIImage(data: item.image!)
+                    self.titleTextField.text = item.title
+                    self.descriptionTextView.text = item.descriptionData
+                }
+            case .failure(let error):
+                if let error = error as NSError? {
+                  print("Could not retrieve entity \(error), \(error.userInfo)")
+                }
+            }
+        })
         registerForKeyboardNotifications()
     }
     
@@ -51,11 +105,25 @@ class ScanViewController: UIViewController, Storyboarded {
     }
     
     // MARK: - Action
-    @IBAction private func tapped(scan button: UIButton) {
+    @IBAction private func takePhotoBtnTapped(scan button: UIButton) {
         let scanner = VNDocumentCameraViewController()
         scanner.delegate = self
         present(scanner, animated: true)
     }
+    
+    @IBAction func saveBtnTapped(_ sender: Any) {
+        guard let title = titleTextField.text, title != "",
+              let description = descriptionTextView.text, // check description text
+              description != descriptionPlaceHolderText,
+              description != "",
+              let image = imageView.image
+        else {
+            AlertPresenter.shared.present(title: "Save entry", message: "Clould not save entry,please add content", on: self)
+            return
+        }
+        viewModel?.saveData(title: title, description: description, image: image)
+    }
+    
     
     //MARK: - Methods
     
@@ -138,4 +206,11 @@ extension ScanViewController: UITextViewDelegate {
             descriptionTextView.textColor = .lightGray
         }
     }
+}
+extension UIImage {
+    
+    func toData() -> Data? {
+        return pngData()
+    }
+    
 }
