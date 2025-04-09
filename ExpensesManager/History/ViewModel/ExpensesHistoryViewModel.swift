@@ -8,7 +8,7 @@
 import Foundation
 
 protocol ExpensesHistoryViewModelProtocol: ObservableObject {
-    var state: ScreenState<[ExpenseProtocol], Error> { get }
+    var state: ScreenState<[ExpenseModel], Error> { get }
     var storage: Storage { get }
     func loadExpenses()
 }
@@ -17,17 +17,21 @@ class ExpensesHistoryViewModel: ExpensesHistoryViewModelProtocol {
     
     //MARK: Properties
     var storage: Storage
-    @Published var state: ScreenState<[ExpenseProtocol], Error> = .idle
+    @Published var state: ScreenState<[ExpenseModel], Error> = .idle
     
     init(storage: Storage) {
         self.storage = storage
     }
     
     func loadExpenses() {
+        self.state = .loading
         storage.fetchEntry { [weak self] (result) in
             switch result {
-            case .success(let todosManagedObjects):
-                self?.state = .loaded(todosManagedObjects)
+            case .success(let managedObjects):
+                let expenseContainers: [ExpenseContainerProtocol] =  managedObjects.compactMap { ExpenseContainer(nsManagedObject: $0)
+                }
+                let expense = expenseContainers.compactMap { $0.expense }
+                self?.state =  .loaded(expense)
             case .failure(let error):
                 self?.state = .failed(error)
             }

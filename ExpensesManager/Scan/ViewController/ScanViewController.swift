@@ -72,7 +72,8 @@ class ScanViewController: UIViewController, Storyboarded {
             AlertPresenter.shared.present(title: "Save entry", message: "Clould not save entry,please add content", on: self)
             return
         }
-        viewModel?.saveData(title: title, description: description, image: image)
+        let expense = ExpenseModel(id: UUID(), title: title, descriptionData: description, createdDate: Date(), image: image)
+        viewModel?.saveData(expense: expense)
     }
     
     

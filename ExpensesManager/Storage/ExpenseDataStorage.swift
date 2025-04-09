@@ -6,12 +6,15 @@
 //
 
 import CoreData
-import Combine
 
 protocol Storage {
-    func fetchEntries() -> [ExpenseProtocol]
-    func fetchEntry(completion: @escaping (Result<[Expense], Error>) -> ())
-    func saveEntry(title: String, description: String, image: Data, completion: @escaping (Result<Bool, Error>) -> ())
+    func fetchEntry<T:NSManagedObject>(completion: @escaping (Result<[T], Error>) -> ())
+    func saveEntry<T>(object: T, completion: @escaping (Result<Bool, Error>) -> ())
+}
+
+struct StorageError {
+    static let errorSaveEntry = NSError(domain: "Could not save to storage", code: 1, userInfo: nil)
+    static let errorFetchEntry = NSError(domain: "Could not fetch from storage", code: 2, userInfo: nil)
 }
 
 struct ExpenseDataStorage: Storage {
@@ -22,20 +25,8 @@ struct ExpenseDataStorage: Storage {
         self.mainContext = mainContext
     }
     
-    func fetchEntries() -> [ExpenseProtocol] {
-        let fetchRequest: NSFetchRequest<Expense> = Expense.fetchRequest()
-        fetchRequest.sortDescriptors = [NSSortDescriptor(keyPath: \Expense.createdDate, ascending: true)]
-        do {
-            let expenses = try mainContext.fetch(fetchRequest)
-            return expenses
-        } catch let error {
-            print("error fetching: \(error)")
-            return []
-        }
-    }
-    
-    func fetchEntry(completion: @escaping (Result<[Expense], Error>) -> ()) {
-        let fetchRequest = NSFetchRequest<Expense>(entityName: "Expense")
+    func fetchEntry<T:NSManagedObject>(completion: @escaping (Result<[T], Error>) -> ()) {
+        let fetchRequest = NSFetchRequest<T>(entityName: "Expense")
         
         do {
             let item = try mainContext.fetch(fetchRequest)
@@ -58,13 +49,18 @@ struct ExpenseDataStorage: Storage {
         }
     }
     
-    func saveEntry(title: String, description: String, image: Data, completion: @escaping (Result<Bool, Error>) -> ()) {
+    func saveEntry<T>(object: T, completion: @escaping (Result<Bool, Error>) -> ()) {
+        guard let expense = object as? ExpenseModel else {
+            completion(.failure(StorageError.errorSaveEntry))
+            return
+        }
         let newItem = Expense(context: mainContext)
-        newItem.title = title
-        newItem.createdDate = Date()
-        newItem.descriptionData = description
+        newItem.title = expense.title
         newItem.id = UUID()
-        newItem.image = image
+        newItem.descriptionData = expense.descriptionData
+        newItem.createdDate = Date()
+        newItem.image = expense.image
+        
         saveContext{ result in
             switch result {
             case .success(let response):

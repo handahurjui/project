@@ -13,8 +13,8 @@ class ScanViewModel {
         self.storage = storage
     }
         
-    func saveData(title: String, description: String, image: Data) {
-        storage.saveEntry(title: title, description: description, image: image) { result in
+    func saveData(expense: ExpenseModel) {
+        storage.saveEntry(object: expense) { result in
             switch result {
             case .success(let response):
                 print("Successful saved")
