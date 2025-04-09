@@ -16,15 +16,19 @@ class TabBarCoordinator: Coordinator {
     init(rootNavigationController: UINavigationController) { self.rootNavigationController = rootNavigationController }
     
     override func start() {
+        
         let scanVM = ScanViewModel(storage: ExpenseDataStorage())
         let scanVC = ScanViewController.instantiate()
         scanVC.viewModel = scanVM
-        let settingsVC = HistoryViewController.instantiate()
         scanVC.tabBarItem = UITabBarItem(title: "Scan", image: UIImage(systemName: "camera"), selectedImage: UIImage(systemName: "camera.fill"))
-        settingsVC.tabBarItem = UITabBarItem(title: "History", image: UIImage(systemName: "archivebox"), selectedImage: UIImage(systemName: "archivebox.fill"))
+        
+        let historyVM = HistoryViewModel(storage: ExpenseDataStorage())
+        let historyVC = HistoryViewController.instantiate()
+        historyVC.viewModel = historyVM
+        historyVC.tabBarItem = UITabBarItem(title: "History", image: UIImage(systemName: "archivebox"), selectedImage: UIImage(systemName: "archivebox.fill"))
         
         let tabBarController = UITabBarController()
-        tabBarController.viewControllers = [scanVC, settingsVC]
+        tabBarController.viewControllers = [scanVC, historyVC]
         
         rootNavigationController.setViewControllers([tabBarController], animated: false)
     }

@@ -31,7 +31,14 @@ class ScanViewModel {
     }
     
     func saveData(title: String, description: String, image: UIImage) {
-        storage.saveEntry(title: title, description: description, image: image)
+        storage.saveEntry(title: title, description: description, image: image) { result in
+            switch result {
+            case .success(let response):
+                print("Successful saved")
+            case .failure(let error):
+                print("Clould not save")
+            }
+        }
     }
 }
 
@@ -206,11 +213,4 @@ extension ScanViewController: UITextViewDelegate {
             descriptionTextView.textColor = .lightGray
         }
     }
-}
-extension UIImage {
-    
-    func toData() -> Data? {
-        return pngData()
-    }
-    
 }

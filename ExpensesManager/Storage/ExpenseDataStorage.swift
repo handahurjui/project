@@ -14,17 +14,24 @@ struct ExpenseDataStorage {
     
     init(mainContext: NSManagedObjectContext = PersistenceCoreData.shared.mainContext) {
         self.mainContext = mainContext
+        
     }
     
-    func saveEntry(title: String, description: String, image: UIImage) -> Bool {
+    func saveEntry(title: String, description: String, image: UIImage, completion: @escaping (Result<Bool, Error>) -> ()) {
         let newItem = Expense(context: mainContext)
         newItem.title = title
         newItem.createdDate = Date()
         newItem.descriptionData = description
         newItem.id = UUID()
         newItem.image = image.toData()
-        saveContext()
-      return true
+        saveContext{ result in
+            switch result {
+            case .success(let response):
+                completion(.success(response))
+            case .failure(let error):
+                completion(.failure(error))
+            }
+        }
     }
     
     func fetchEntry(completion: @escaping (Result<[Expense]?, Error>) -> ()) {
@@ -38,13 +45,14 @@ struct ExpenseDataStorage {
         }
     }
     
-    func saveContext() {
+    func saveContext(completion: @escaping (Result<Bool, Error>) -> ()) {
         if mainContext.hasChanges {
             do {
                 try mainContext.save()
+                completion(.success(true))
             } catch {
                 if let error = error as NSError? {
-                  fatalError("Unresolved error \(error), \(error.userInfo)")
+                    completion(.failure(error))
                 }
             }
         }
