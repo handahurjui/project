@@ -12,36 +12,6 @@ protocol ScanViewModelDataSource {
     
 }
 
-class ScanViewModel {
-    var storage: ExpenseDataStorage
-    
-    init(storage: ExpenseDataStorage) {
-        self.storage = storage
-    }
-    
-    func loadData(completion: @escaping (Result<[Expense]?, Error>) -> ()) {
-        storage.fetchEntry { result in
-            switch result {
-            case .success(let response):
-                completion(.success(response))
-            case .failure(let error):
-                completion(.failure(error))
-            }
-        }
-    }
-    
-    func saveData(title: String, description: String, image: UIImage) {
-        storage.saveEntry(title: title, description: description, image: image.toData()!) { result in
-            switch result {
-            case .success(let response):
-                print("Successful saved")
-            case .failure(let error):
-                print("Clould not save")
-            }
-        }
-    }
-}
-
 class ScanViewController: UIViewController, Storyboarded {
 
     // MARK: - Outlets
@@ -67,18 +37,6 @@ class ScanViewController: UIViewController, Storyboarded {
         view.addGestureRecognizer(gestureRecognizer)
         
         configureUIViews()
-        viewModel?.loadData(completion: { result in
-            switch result {
-            case .success(let response):
-                if let item = response?.first as? Expense {
-                    self.imageView.image = UIImage(data: item.image!)
-                    self.titleTextField.text = item.title
-                    self.descriptionTextView.text = item.descriptionData
-                }
-            case .failure(let error):
-                print("could not retrieve entity")
-            }
-        })
     }
     
     private func configureUIViews() {
@@ -89,20 +47,6 @@ class ScanViewController: UIViewController, Storyboarded {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        viewModel?.loadData(completion: { result in
-            switch result {
-            case .success(let response):
-                if let item = response?.first as? Expense {
-                    self.imageView.image = UIImage(data: item.image!)
-                    self.titleTextField.text = item.title
-                    self.descriptionTextView.text = item.descriptionData
-                }
-            case .failure(let error):
-                if let error = error as NSError? {
-                  print("Could not retrieve entity \(error), \(error.userInfo)")
-                }
-            }
-        })
         registerForKeyboardNotifications()
     }
     
@@ -123,7 +67,7 @@ class ScanViewController: UIViewController, Storyboarded {
               let description = descriptionTextView.text, // check description text
               description != descriptionPlaceHolderText,
               description != "",
-              let image = imageView.image
+              let image = imageView.image?.toData()
         else {
             AlertPresenter.shared.present(title: "Save entry", message: "Clould not save entry,please add content", on: self)
             return

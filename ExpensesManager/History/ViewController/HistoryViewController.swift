@@ -8,14 +8,6 @@
 import UIKit
 import SwiftUI
 
-class HistoryViewModel {
-    var storage: ExpenseDataStorage
-    
-    init(storage: ExpenseDataStorage) {
-        self.storage = storage
-    }
-}
-
 class HistoryViewController: UIViewController, Storyboarded {
     
     //MARK: Properties

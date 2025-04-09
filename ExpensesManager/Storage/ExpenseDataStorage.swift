@@ -34,23 +34,6 @@ class ExpenseDataStorage: ExpensesHistoryViewModel {
         }
     }
     
-    func saveEntry(title: String, description: String, image: Data, completion: @escaping (Result<Bool, Error>) -> ()) {
-        let newItem = Expense(context: mainContext)
-        newItem.title = title
-        newItem.createdDate = Date()
-        newItem.descriptionData = description
-        newItem.id = UUID()
-        newItem.image = image
-        saveContext{ result in
-            switch result {
-            case .success(let response):
-                completion(.success(response))
-            case .failure(let error):
-                completion(.failure(error))
-            }
-        }
-    }
-    
     func fetchEntry(completion: @escaping (Result<[Expense]?, Error>) -> ()) {
         let fetchRequest = NSFetchRequest<Expense>(entityName: "Expense")
         
@@ -71,6 +54,25 @@ class ExpenseDataStorage: ExpensesHistoryViewModel {
                 if let error = error as NSError? {
                     completion(.failure(error))
                 }
+            }
+        }
+    }
+}
+
+extension ExpenseDataStorage: SaveProtocol {
+    func saveEntry(title: String, description: String, image: Data, completion: @escaping (Result<Bool, Error>) -> ()) {
+        let newItem = Expense(context: mainContext)
+        newItem.title = title
+        newItem.createdDate = Date()
+        newItem.descriptionData = description
+        newItem.id = UUID()
+        newItem.image = image
+        saveContext{ result in
+            switch result {
+            case .success(let response):
+                completion(.success(response))
+            case .failure(let error):
+                completion(.failure(error))
             }
         }
     }

@@ -18,7 +18,7 @@ class TabBarCoordinator: Coordinator {
     override func start() {
         
         let storage = ExpenseDataStorage()
-        let scanVM = ScanViewModel(storage: storage)
+        let scanVM = ScanViewModel(storage: storage as? SaveProtocol ?? storage)
         let scanVC = ScanViewController.instantiate()
         scanVC.viewModel = scanVM
         scanVC.tabBarItem = UITabBarItem(title: "Scan", image: UIImage(systemName: "camera"), selectedImage: UIImage(systemName: "camera.fill"))
