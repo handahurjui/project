@@ -23,6 +23,7 @@ class HistoryViewController: UIViewController, Storyboarded {
     override func viewDidLoad() {
         super.viewDidLoad()
         title = "History"
+        tableView.accessibilityLabel = "tableView"
         viewModel.loadExpenses()
 //        createSwiftUIList()
     }
@@ -39,7 +40,6 @@ class HistoryViewController: UIViewController, Storyboarded {
         listController.didMove(toParent: self)
     }
 }
-
 
 //MARK: TableView Delegate & Data Source
 extension HistoryViewController: UITableViewDelegate, UITableViewDataSource {

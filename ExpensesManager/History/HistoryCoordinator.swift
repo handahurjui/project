@@ -7,6 +7,10 @@
 
 import UIKit
 
+protocol HistoryCoordinatorDelegate {
+    func goToDetailsPage(expenseDataView: ExpenseDataView)
+}
+
 class HistoryCoordinator: Coordinator {
     
     private let rootNavigationController: UINavigationController
@@ -20,8 +24,19 @@ class HistoryCoordinator: Coordinator {
     override func start() {
         super.addChildCoordinator(self)
         let historyVM = HistoryViewModel(storage: storage)
+        historyVM.coordinator = self
         let historyVC = HistoryViewController.instantiate()
         historyVC.viewModel = historyVM
         rootNavigationController.pushViewController(historyVC, animated: false)
     }
+}
+
+// MARK: HistoryViewModel Callbacks
+extension HistoryCoordinator: HistoryCoordinatorDelegate {
+    func goToDetailsPage(expenseDataView: ExpenseDataView) {
+        let vc = DetailsViewController.instantiate()
+        vc.expenseDataView = expenseDataView
+        rootNavigationController.pushViewController(vc, animated: true)
+    }
+    
 }

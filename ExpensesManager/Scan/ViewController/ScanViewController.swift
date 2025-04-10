@@ -18,7 +18,6 @@ class ScanViewController: UIViewController, Storyboarded {
         }
     }
     
-    
     //MARK: Properties
     var viewModel: ScanViewModel?
     private let descriptionPlaceHolderText = "Write description of your photo"

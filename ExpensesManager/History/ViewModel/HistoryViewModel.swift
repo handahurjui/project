@@ -22,9 +22,8 @@ class HistoryViewModel {
             viewDelegate?.refreshScreen()
         }
     }
-    
     var viewDelegate: HistoryViewModelDelegate?
-    var coordinator: HistoryCoordinator?
+    var coordinator: HistoryCoordinatorDelegate?
     
     init(storage: Storage) {
         self.storage = storage
@@ -50,8 +49,9 @@ extension HistoryViewModel {
     func cellDataFor(row: Int) -> ExpenseDataView {
         return  managedObjects![row].expenseDataView!
     }
-    // Delegate
+    // Delegate events
     func didSelectRow(_ row: Int) {
-        // GoTo Details Page
+        let item =  managedObjects![row].expenseDataView!
+        coordinator?.goToDetailsPage(expenseDataView: item)
     }
 }
