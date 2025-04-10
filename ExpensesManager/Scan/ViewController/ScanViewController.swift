@@ -8,19 +8,15 @@
 import UIKit
 import VisionKit
 
-protocol ScanViewModelDataSource {
-    
-}
-
 class ScanViewController: UIViewController, Storyboarded {
-
+    
     // MARK: - Outlets
-    @IBOutlet weak var scrollView: UIScrollView!
-    @IBOutlet private var imageView: UIImageView!
-    @IBOutlet weak var scanBtn: UIButton!
-    @IBOutlet weak var takePhotoBtn: UIButton!
-    @IBOutlet weak var titleTextField: UITextField!
-    @IBOutlet weak var descriptionTextView: UITextView!
+    @IBOutlet weak var detailsViewBottomConstraint: NSLayoutConstraint!
+    @IBOutlet weak var detailsView: DetailsView! {
+        didSet {
+            detailsView.delegate = self
+        }
+    }
     
     
     //MARK: Properties
@@ -36,18 +32,12 @@ class ScanViewController: UIViewController, Storyboarded {
         gestureRecognizer.cancelsTouchesInView = false
         view.addGestureRecognizer(gestureRecognizer)
         
-        configureUIViews()
-    }
-    
-    private func configureUIViews() {
-        descriptionTextView.layer.cornerRadius = 5
-        descriptionTextView.layer.borderColor = UIColor.black.cgColor
-        descriptionTextView.layer.borderWidth = 1
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         registerForKeyboardNotifications()
+        configureUIViews()
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -55,31 +45,12 @@ class ScanViewController: UIViewController, Storyboarded {
         unregisterKeyboardNotifications()
     }
     
-    // MARK: - Action
-    @IBAction private func takePhotoBtnTapped(scan button: UIButton) {
-        let scanner = VNDocumentCameraViewController()
-        scanner.delegate = self
-        present(scanner, animated: true)
+    private func configureUIViews() {
+        detailsView.titleTextField.text = ""
+        detailsView.descriptionTextView.text = descriptionPlaceHolderText
+        detailsView.imageView.image = UIImage(systemName: "photo.badge.magnifyingglass.fill")
     }
     
-    @IBAction func saveBtnTapped(_ sender: Any) {
-        guard let title = titleTextField.text, title != "",
-              let description = descriptionTextView.text, // check description text
-              description != descriptionPlaceHolderText,
-              description != "",
-              let image = imageView.image?.toData()
-        else {
-            AlertPresenter.shared.present(title: "Save entry", message: "Clould not save entry,please add content", on: self)
-            return
-        }
-        let expense = ExpenseModel(id: UUID(), title: title, descriptionData: description, createdDate: Date(), image: image)
-        viewModel?.saveData(expense: expense)
-    }
-    
-    
-    //MARK: - Methods
-    
-
     //MARK: Keyboard notifications
     func registerForKeyboardNotifications() {
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow),
@@ -89,21 +60,30 @@ class ScanViewController: UIViewController, Storyboarded {
     }
     
     func unregisterKeyboardNotifications() {
-        NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardWillShowNotification, object: nil)
-        NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardWillHideNotification, object: nil)
-
+        NotificationCenter.default.removeObserver(self)
     }
     
     @objc func keyboardWillShow(notification: NSNotification) {
-        if let keyboardFrame = notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? CGRect {
-            let keyboardHeight = keyboardFrame.height
-            scrollView.contentInset.bottom = keyboardHeight
+        if notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] is CGRect {
+            if let userInfo = notification.userInfo,
+               let keyboardFrame = userInfo[UIResponder.keyboardFrameEndUserInfoKey] as? CGRect,
+               let animationDuration = userInfo[UIResponder.keyboardAnimationDurationUserInfoKey] as? TimeInterval {
+                detailsViewBottomConstraint.constant = keyboardFrame.height
+                UIView.animate(withDuration: animationDuration) {
+                    self.view.layoutIfNeeded()
+                }
+            }
         }
     }
     
     @objc func keyboardWillHide(notification: NSNotification) {
-        scrollView.contentInset.bottom = 0
-        self.view.endEditing(true)
+        if let userInfo = notification.userInfo,
+           let animationDuration = userInfo[UIResponder.keyboardAnimationDurationUserInfoKey] as? TimeInterval {
+            detailsViewBottomConstraint.constant = 0
+            UIView.animate(withDuration: animationDuration) {
+                self.view.layoutIfNeeded()
+            }
+        }
     }
     
     @objc func dismissKeyboard() {
@@ -111,20 +91,43 @@ class ScanViewController: UIViewController, Storyboarded {
     }
 }
 
+//MARK: - DetailsViewDelegate
+extension ScanViewController: DetailsViewDelegate {
+    func didTapSaveBtn() {
+        guard let title = detailsView.titleTextField.text, title != "",
+              let description = detailsView.descriptionTextView.text,
+              description != descriptionPlaceHolderText,
+              description != "",
+              let image = detailsView.imageView.image?.toData()
+        else {
+            AlertPresenter.shared.present(title: "Save entry", message: "Clould not save entry,please add content", on: self)
+            return
+        }
+        let expense = ExpenseModel(id: UUID(), title: title, descriptionData: description, createdDate: Date(), image: image)
+        viewModel?.saveData(expense: expense)
+    }
+    
+    func didTapTakePhotoBtn() {
+        let scanner = VNDocumentCameraViewController()
+        scanner.delegate = self
+        present(scanner, animated: true)
+    }
+}
+
 //MARK: - VNDocumentCameraViewControllerDelegate
 extension ScanViewController: VNDocumentCameraViewControllerDelegate {
     func documentCameraViewController(_ controller: VNDocumentCameraViewController, didFinishWith scan: VNDocumentCameraScan) {
         controller.dismiss(animated: true) { [weak self] in
-            self?.imageView.image = scan.imageOfPage(at: 0)
+            self?.detailsView.imageView.image = scan.imageOfPage(at: 0)
             
             guard let self = self else { return }
-            AlertPresenter.shared.present(title: "Success!", message: "Document \(scan.title) scanned with \(scan.pageCount) pages.", on: self)
+            AlertPresenter.shared.present(title: "Success!", message: "Document \(scan.title) scanned \(scan.pageCount) pages.", on: self)
         }
     }
     
     func documentCameraViewControllerDidCancel(_ controller: VNDocumentCameraViewController) {
         controller.dismiss(animated: true) { [weak self] in
-            self?.imageView.image = nil
+            self?.detailsView.imageView.image = nil
             
             guard let self else { return }
             AlertPresenter.shared.present(title: "Cancelled", message: "User cancelled the scanning process.", on: self)
@@ -133,7 +136,7 @@ extension ScanViewController: VNDocumentCameraViewControllerDelegate {
     
     func documentCameraViewController(_ controller: VNDocumentCameraViewController, didFailWithError error: Error) {
         controller.dismiss(animated: true) { [weak self] in
-            self?.imageView.image = nil
+            self?.detailsView.imageView.image = nil
             
             guard let self else { return }
             AlertPresenter.shared.present(title: "Error", message: error.localizedDescription, on: self)
@@ -141,21 +144,4 @@ extension ScanViewController: VNDocumentCameraViewControllerDelegate {
     }
 }
 
-//MARK: - UITextViewDelegate
-extension ScanViewController: UITextViewDelegate {
-    
-    func textViewDidBeginEditing(_ textView: UITextView) {
-        
-        if !descriptionTextView.text!.isEmpty && descriptionTextView.text! == descriptionPlaceHolderText {
-            descriptionTextView.text = ""
-            descriptionTextView.textColor = .black
-        }
-    }
-    
-    func textViewDidEndEditing(_ textView: UITextView) {
-        if descriptionTextView.text.isEmpty {
-            descriptionTextView.text = descriptionPlaceHolderText
-            descriptionTextView.textColor = .lightGray
-        }
-    }
-}
+

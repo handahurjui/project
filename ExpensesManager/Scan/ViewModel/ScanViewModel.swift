@@ -4,6 +4,7 @@
 //
 //  Created by Anda on 09.04.2025.
 //
+
 import Foundation
 
 class ScanViewModel {
@@ -16,9 +17,9 @@ class ScanViewModel {
     func saveData(expense: ExpenseModel) {
         storage.saveEntry(object: expense) { result in
             switch result {
-            case .success(let response):
+            case .success(_):
                 print("Successful saved")
-            case .failure(let error):
+            case .failure(_):
                 print("Clould not save")
             }
         }
