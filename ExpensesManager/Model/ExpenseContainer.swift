@@ -10,6 +10,7 @@ import CoreData
 protocol ExpenseContainerProtocol {
     var todoNSManagedObject: NSManagedObject { set get }
     var expense: ExpenseModel? { get }
+    var expenseDataView: ExpenseDataView? { get }
 }
 
 struct ExpenseContainer: ExpenseContainerProtocol {
@@ -18,7 +19,11 @@ struct ExpenseContainer: ExpenseContainerProtocol {
             createExpenseModel(from: todoNSManagedObject)
         }
     }
-
+    var expenseDataView: ExpenseDataView? {
+        get {
+            return ExpenseDataView(expense: expense!)
+        }
+    }
     var expense: ExpenseModel?
 
     private mutating func createExpenseModel(from nsManagedObj: NSManagedObject) {

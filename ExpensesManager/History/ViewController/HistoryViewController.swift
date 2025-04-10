@@ -51,7 +51,7 @@ extension HistoryViewController: UITableViewDelegate, UITableViewDataSource {
         let cell = tableView.dequeueReusableCell(withIdentifier: cellReuseID) ?? UITableViewCell(style: .subtitle, reuseIdentifier: cellReuseID)
         let cellData = viewModel.cellDataFor(row: indexPath.row)
         cell.textLabel?.text = cellData.title
-        cell.detailTextLabel?.text = "\(cellData.createdDate)"
+        cell.detailTextLabel?.text = cellData.createdDate
         cell.accessoryType = .disclosureIndicator
         
         return cell

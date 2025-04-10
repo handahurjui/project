@@ -47,8 +47,8 @@ extension HistoryViewModel {
     // Data Source
     func numberOfRows() -> Int { return managedObjects!.count }
     
-    func cellDataFor(row: Int) -> ExpenseModel {
-        return  managedObjects![row].expense!
+    func cellDataFor(row: Int) -> ExpenseDataView {
+        return  managedObjects![row].expenseDataView!
     }
     // Delegate
     func didSelectRow(_ row: Int) {
