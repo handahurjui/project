@@ -9,12 +9,14 @@ import UIKit
 
 protocol HistoryCoordinatorDelegate {
     func goToDetailsPage(expenseDataView: ExpenseDataView)
+    func goToAddNewItem(controller: UIViewController)
 }
 
 class HistoryCoordinator: Coordinator {
     
     private let rootNavigationController: UINavigationController
     private var storage: Storage
+    var didTappedAddNewItemFlow: (() -> Void)?
     
     init(rootNavigationController: UINavigationController, storage: Storage) {
         self.rootNavigationController = rootNavigationController
@@ -33,6 +35,12 @@ class HistoryCoordinator: Coordinator {
 
 // MARK: HistoryViewModel Callbacks
 extension HistoryCoordinator: HistoryCoordinatorDelegate {
+    func goToAddNewItem(controller: UIViewController) {
+        if let changeFlow = didTappedAddNewItemFlow {
+            changeFlow()
+        }
+    }
+    
     func goToDetailsPage(expenseDataView: ExpenseDataView) {
         let vc = DetailsViewController.instantiate()
         vc.expenseDataView = expenseDataView

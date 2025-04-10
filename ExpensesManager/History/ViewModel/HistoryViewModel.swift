@@ -13,8 +13,7 @@ protocol HistoryViewModelDelegate {
 }
 
 class HistoryViewModel {
-    
-    
+        
     // MARK: Properties
     var storage: Storage
     var managedObjects: [ExpenseContainer]? {
@@ -53,5 +52,9 @@ extension HistoryViewModel {
     func didSelectRow(_ row: Int) {
         let item =  managedObjects![row].expenseDataView!
         coordinator?.goToDetailsPage(expenseDataView: item)
+    }
+    
+    func addBtnTapped(controller: UIViewController) {
+        coordinator?.goToAddNewItem(controller: controller)
     }
 }

@@ -25,9 +25,11 @@ class HistoryViewController: UIViewController, Storyboarded {
         title = "History"
         tableView.accessibilityLabel = "tableView"
         viewModel.loadExpenses()
+        setupNavigationBar()
 //        createSwiftUIList()
     }
 
+    // MARK: Functions
     private func createSwiftUIList() {
         guard let vm = viewModel else { return }
         let expensesHistoryVM = ExpensesHistoryViewModel(storage: vm.storage)
@@ -38,6 +40,16 @@ class HistoryViewController: UIViewController, Storyboarded {
         view.pinView(listController.view)
         addChild(listController)
         listController.didMove(toParent: self)
+    }
+    
+    private func setupNavigationBar() {
+        navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .add,
+                                                            target: self,
+                                                            action: #selector(addBtnTapped))
+    }
+    
+    @objc private func addBtnTapped() {
+        viewModel.addBtnTapped(controller: self)
     }
 }
 
