@@ -10,6 +10,8 @@ import UIKit
 protocol HistoryCoordinatorDelegate {
     func goToDetailsPage(expenseDataView: ExpenseDataView)
     func goToAddNewItem(controller: UIViewController)
+    func goToEditVC(managedObject: ExpenseContainerProtocol, controller: UIViewController)
+    func popVC()
 }
 
 class HistoryCoordinator: Coordinator {
@@ -35,6 +37,15 @@ class HistoryCoordinator: Coordinator {
 
 // MARK: HistoryViewModel Callbacks
 extension HistoryCoordinator: HistoryCoordinatorDelegate {
+    func goToEditVC(managedObject: ExpenseContainerProtocol, controller: UIViewController) {
+        let vc = EditViewController.instantiate()
+        vc.expenseContainer = managedObject as? ExpenseContainer
+        let vm = EditViewModel(storage: storage)
+        vm.coordinator = self
+        vc.viewModel = vm
+        rootNavigationController.pushViewController(vc, animated: true)
+    }
+    
     func goToAddNewItem(controller: UIViewController) {
         if let changeFlow = didTappedAddNewItemFlow {
             changeFlow()
@@ -47,4 +58,7 @@ extension HistoryCoordinator: HistoryCoordinatorDelegate {
         rootNavigationController.pushViewController(vc, animated: true)
     }
     
+    func popVC() {
+        rootNavigationController.popViewController(animated: true)
+    }
 }

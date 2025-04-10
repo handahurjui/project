@@ -17,22 +17,72 @@
                         <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="W5Z-xq-lqe" customClass="DetailsView" customModule="ExpensesManager" customModuleProvider="target">
-                                <rect key="frame" x="0.0" y="59" width="393" height="759"/>
-                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
-                            </view>
+                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="1OL-mW-AU9">
+                                <rect key="frame" x="0.0" y="59" width="393" height="580.33333333333337"/>
+                                <subviews>
+                                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="mtv-gC-hxV">
+                                        <rect key="frame" x="0.0" y="0.0" width="393" height="300"/>
+                                        <color key="backgroundColor" systemColor="groupTableViewBackgroundColor"/>
+                                        <accessibility key="accessibilityConfiguration" identifier="imageTitleLabel" label="imageTitleLabel">
+                                            <bool key="isElement" value="YES"/>
+                                        </accessibility>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="300" id="80B-CR-TP6"/>
+                                        </constraints>
+                                    </imageView>
+                                    <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Title" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="QgD-Jk-gJl">
+                                        <rect key="frame" x="0.0" y="308" width="393" height="50"/>
+                                        <accessibility key="accessibilityConfiguration" identifier="editTitleLabel" label="editTitleLabel"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="50" id="Anw-wU-S0C"/>
+                                        </constraints>
+                                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                        <textInputTraits key="textInputTraits" autocapitalizationType="words"/>
+                                    </textField>
+                                    <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" text="Write description of your photo" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="5Jf-Lo-uoF">
+                                        <rect key="frame" x="0.0" y="366" width="393" height="172"/>
+                                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                        <accessibility key="accessibilityConfiguration" identifier="editDescriptionTextView" label="editDescriptionTextView"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="172" id="Auu-a4-wz7"/>
+                                        </constraints>
+                                        <color key="textColor" systemColor="systemGrayColor"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                        <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
+                                    </textView>
+                                    <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="scG-RY-QEi">
+                                        <rect key="frame" x="0.0" y="546" width="393" height="34.333333333333371"/>
+                                        <subviews>
+                                            <button opaque="NO" contentMode="scaleToFill" verticalCompressionResistancePriority="751" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="gzA-8a-Dqr" userLabel="Save Btn">
+                                                <rect key="frame" x="0.0" y="0.0" width="393" height="34.333333333333336"/>
+                                                <constraints>
+                                                    <constraint firstAttribute="height" constant="50" id="C0H-6i-hhL"/>
+                                                </constraints>
+                                                <color key="tintColor" white="0.33333333329999998" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                <state key="normal" title=" SAVE " image="square.and.arrow.down" catalog="system"/>
+                                                <buttonConfiguration key="configuration" style="plain" image="square.and.arrow.down.fill" catalog="system" title=" SAVE "/>
+                                                <connections>
+                                                    <action selector="saveBtnTapped:" destination="Y6W-OH-hqX" eventType="touchUpInside" id="bXi-sA-dij"/>
+                                                </connections>
+                                            </button>
+                                        </subviews>
+                                    </stackView>
+                                </subviews>
+                            </stackView>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="vDu-zF-Fre"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
-                            <constraint firstItem="vDu-zF-Fre" firstAttribute="trailing" secondItem="W5Z-xq-lqe" secondAttribute="trailing" id="2LQ-oS-P5h"/>
-                            <constraint firstItem="vDu-zF-Fre" firstAttribute="bottom" secondItem="W5Z-xq-lqe" secondAttribute="bottom" id="AW2-tV-4OE"/>
-                            <constraint firstItem="W5Z-xq-lqe" firstAttribute="top" secondItem="vDu-zF-Fre" secondAttribute="top" id="BOx-1o-nUQ"/>
-                            <constraint firstItem="W5Z-xq-lqe" firstAttribute="leading" secondItem="vDu-zF-Fre" secondAttribute="leading" id="D9N-MK-mvc"/>
+                            <constraint firstItem="vDu-zF-Fre" firstAttribute="top" secondItem="1OL-mW-AU9" secondAttribute="top" id="BU7-tT-Nhs"/>
+                            <constraint firstItem="vDu-zF-Fre" firstAttribute="trailing" secondItem="1OL-mW-AU9" secondAttribute="trailing" id="X4D-4W-jsS"/>
+                            <constraint firstItem="vDu-zF-Fre" firstAttribute="bottom" secondItem="1OL-mW-AU9" secondAttribute="bottom" id="kb6-p5-ego"/>
+                            <constraint firstItem="1OL-mW-AU9" firstAttribute="leading" secondItem="vDu-zF-Fre" secondAttribute="leading" id="rx0-4Y-VNG"/>
                         </constraints>
                     </view>
                     <connections>
-                        <outlet property="detailsView" destination="W5Z-xq-lqe" id="0JB-5e-HlP"/>
+                        <outlet property="descriptionTextView" destination="5Jf-Lo-uoF" id="as1-71-DwN"/>
+                        <outlet property="imageView" destination="mtv-gC-hxV" id="uY1-S7-arN"/>
+                        <outlet property="titleTextField" destination="QgD-Jk-gJl" id="OT6-7a-vjP"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Ief-a0-LHa" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
@@ -41,8 +91,16 @@
         </scene>
     </scenes>
     <resources>
+        <image name="square.and.arrow.down" catalog="system" width="114" height="128"/>
+        <image name="square.and.arrow.down.fill" catalog="system" width="121" height="128"/>
+        <systemColor name="groupTableViewBackgroundColor">
+            <color red="0.94901960780000005" green="0.94901960780000005" blue="0.96862745100000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </systemColor>
         <systemColor name="systemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
+        <systemColor name="systemGrayColor">
+            <color red="0.5568627451" green="0.5568627451" blue="0.57647058819999997" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
     </resources>
 </document>

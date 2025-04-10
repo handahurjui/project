@@ -10,11 +10,13 @@ import CoreData
 protocol Storage {
     func fetchEntry<T:NSManagedObject>(completion: @escaping (Result<[T], Error>) -> ())
     func saveEntry<T>(object: T, completion: @escaping (Result<Bool, Error>) -> ())
+    func update<T>(object: T, completion: @escaping (Result<Bool, Error>) -> ())
 }
 
 struct StorageError {
     static let errorSaveEntry = NSError(domain: "Could not save to storage", code: 1, userInfo: nil)
     static let errorFetchEntry = NSError(domain: "Could not fetch from storage", code: 2, userInfo: nil)
+    static let errorUpdateEntry = NSError(domain: "Could update storage", code: 4, userInfo: nil)
 }
 
 struct ExpenseDataStorage: Storage {
@@ -61,6 +63,25 @@ struct ExpenseDataStorage: Storage {
         newItem.createdDate = Date()
         newItem.image = expense.image
         
+        saveContext{ result in
+            switch result {
+            case .success(let response):
+                completion(.success(response))
+            case .failure(let error):
+                completion(.failure(error))
+            }
+        }
+    }
+    
+    func update<T>(object: T, completion: @escaping (Result<Bool, any Error>) -> ()) {
+        guard let expenseContainer = object as? ExpenseContainer,
+              let expenseModel = expenseContainer.expense else {
+            completion(.failure(StorageError.errorUpdateEntry))
+            return
+        }
+        let nsManagedObject = expenseContainer.expenseNSManagedObject
+        nsManagedObject.setValue(expenseModel.title, forKey: "title")
+        nsManagedObject.setValue(expenseModel.descriptionData, forKey: "descriptionData")
         saveContext{ result in
             switch result {
             case .success(let response):

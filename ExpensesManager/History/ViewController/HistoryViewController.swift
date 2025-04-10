@@ -20,11 +20,15 @@ class HistoryViewController: UIViewController, Storyboarded {
     }
     private let cellReuseID = "expenses"
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        viewModel.loadExpenses()
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         title = "History"
         tableView.accessibilityLabel = "tableView"
-        viewModel.loadExpenses()
         setupNavigationBar()
 //        createSwiftUIList()
     }
@@ -74,6 +78,18 @@ extension HistoryViewController: UITableViewDelegate, UITableViewDataSource {
 extension HistoryViewController {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         viewModel.didSelectRow(indexPath.row)
+    }
+    
+    func tableView(_ tableView: UITableView,
+                   trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
+    
+        let editAction = UIContextualAction(style: .normal, title: "Edit") { [weak self] _,_,_ in
+            guard let self else { return }
+            self.viewModel.editBtnTapped(row: indexPath, controller: self)
+        }
+        
+        let swipeActions = UISwipeActionsConfiguration(actions: [editAction])
+        return swipeActions
     }
 }
 

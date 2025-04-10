@@ -25,19 +25,14 @@ class DetailsViewController: UIViewController, Storyboarded {
         detailsView.titleTextField.accessibilityLabel = "titleLabel"
         detailsView.descriptionTextView.accessibilityLabel = "descriptionTextView"
         
+        detailsView.titleTextField.isUserInteractionEnabled = false
+        detailsView.descriptionTextView.isUserInteractionEnabled = false
+        
+        detailsView.saveBtn.isHidden = true
+        detailsView.takePhotoBtn.isHidden =  true
+        
         detailsView.titleTextField.text = expenseDataView.title
         detailsView.descriptionTextView.text = expenseDataView.descriptionData
         detailsView.imageView.image = UIImage(data: expenseDataView.image)
     }
-    
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destination.
-        // Pass the selected object to the new view controller.
-    }
-    */
-
 }

@@ -8,15 +8,15 @@
 import CoreData
 
 protocol ExpenseContainerProtocol {
-    var todoNSManagedObject: NSManagedObject { set get }
+    var expenseNSManagedObject: NSManagedObject { set get }
     var expense: ExpenseModel? { get }
     var expenseDataView: ExpenseDataView? { get }
 }
 
 struct ExpenseContainer: ExpenseContainerProtocol {
-    var todoNSManagedObject: NSManagedObject {
+    var expenseNSManagedObject: NSManagedObject {
         didSet {
-            createExpenseModel(from: todoNSManagedObject)
+            createExpenseModel(from: expenseNSManagedObject)
         }
     }
     var expenseDataView: ExpenseDataView? {
@@ -42,7 +42,7 @@ struct ExpenseContainer: ExpenseContainerProtocol {
     }
 
     init(nsManagedObject: NSManagedObject) {
-        self.todoNSManagedObject = nsManagedObject
+        self.expenseNSManagedObject = nsManagedObject
         createExpenseModel(from: nsManagedObject)
     }
 }

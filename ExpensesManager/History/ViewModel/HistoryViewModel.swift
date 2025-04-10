@@ -16,7 +16,7 @@ class HistoryViewModel {
         
     // MARK: Properties
     var storage: Storage
-    var managedObjects: [ExpenseContainer]? {
+    private var managedObjects: [ExpenseContainer]? {
         didSet {
             viewDelegate?.refreshScreen()
         }
@@ -56,5 +56,10 @@ extension HistoryViewModel {
     
     func addBtnTapped(controller: UIViewController) {
         coordinator?.goToAddNewItem(controller: controller)
+    }
+    
+    func editBtnTapped(row: IndexPath, controller: UIViewController) {
+        let item = managedObjects![row.row]
+        coordinator?.goToEditVC(managedObject: item, controller: controller)
     }
 }
