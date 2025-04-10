@@ -11,6 +11,7 @@ protocol Storage {
     func fetchEntry<T:NSManagedObject>(completion: @escaping (Result<[T], Error>) -> ())
     func saveEntry<T>(object: T, completion: @escaping (Result<Bool, Error>) -> ())
     func update<T>(object: T, completion: @escaping (Result<Bool, Error>) -> ())
+    func detele<T>(object: T,completion: @escaping (Result<Bool, Error>) -> ())
 }
 
 struct StorageError {
@@ -82,6 +83,19 @@ struct ExpenseDataStorage: Storage {
         let nsManagedObject = expenseContainer.expenseNSManagedObject
         nsManagedObject.setValue(expenseModel.title, forKey: "title")
         nsManagedObject.setValue(expenseModel.descriptionData, forKey: "descriptionData")
+        saveContext{ result in
+            switch result {
+            case .success(let response):
+                completion(.success(response))
+            case .failure(let error):
+                completion(.failure(error))
+            }
+        }
+    }
+    
+    func detele<T>(object: T, completion: @escaping (Result<Bool, any Error>) -> ()) {
+        guard let expenseContainer = object as? ExpenseContainer else { return }
+        mainContext.delete(expenseContainer.expenseNSManagedObject)
         saveContext{ result in
             switch result {
             case .success(let response):

@@ -83,12 +83,17 @@ extension HistoryViewController {
     func tableView(_ tableView: UITableView,
                    trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
     
+        let deletetAction = UIContextualAction(style: .normal, title: "Delete") { [weak self] _,_,_ in
+            guard let self else { return }
+            self.viewModel.deleteBtnTapped(row: indexPath)
+        }
+        deletetAction.backgroundColor = .red
         let editAction = UIContextualAction(style: .normal, title: "Edit") { [weak self] _,_,_ in
             guard let self else { return }
             self.viewModel.editBtnTapped(row: indexPath, controller: self)
         }
         
-        let swipeActions = UISwipeActionsConfiguration(actions: [editAction])
+        let swipeActions = UISwipeActionsConfiguration(actions: [deletetAction, editAction])
         return swipeActions
     }
 }

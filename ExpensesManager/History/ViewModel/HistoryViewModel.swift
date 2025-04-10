@@ -39,6 +39,19 @@ class HistoryViewModel {
             }
         }
     }
+    
+    func deleteBtnTapped(row: IndexPath) {
+        let item = managedObjects![row.row]
+        storage.detele(object: item) { [weak self] (result) in
+            switch result {
+            case .success:
+                self?.loadExpenses()
+                self?.viewDelegate?.refreshScreen()
+            case .failure(let error):
+                self?.viewDelegate?.showError(errorMessage: error.localizedDescription)
+            }
+        }
+    }
 }
 
 extension HistoryViewModel {
