@@ -24,21 +24,81 @@ final class ExpensesManagerUITests: XCTestCase {
         let firstCell = app.tables["tableView"].cells.element(boundBy: 0)
         firstCell.tap()
         
+        let detailsView = app.otherElements["detailsView"]
+        XCTAssertTrue(detailsView.exists, "Custom view should exist on screen")
+    }
+    
+    @MainActor
+    func testEditPage() throws {
+        let app = XCUIApplication()
+        app.launch()
+        let firstCell = app.tables["tableView"].cells.element(boundBy: 0)
+        // Swipe left to reveal the "Edit" action
+        firstCell.swipeLeft()
+
+        // Tap the "Edit" button
+        let editButton = firstCell.buttons["Edit"]
+        XCTAssertTrue(editButton.exists)
+        editButton.tap()
         
-        var detailsView1 = app.otherElements["detailsView"]
-        XCTAssertTrue(detailsView1.exists)
+        let editImageView = app.images["editImageView"]
+        XCTAssertNotNil(editImageView.value)
+        XCTAssertTrue(editImageView.exists)
         
-        var detailsView = app.otherElements["descriptionTextView"]
-//        XCTAssertNotNil(detailsView.value)
-        XCTAssertTrue(detailsView.exists)
+        let editTitleLabel = app.textFields["editTitleLabel"]
+        XCTAssertNotNil(editTitleLabel.value)
+        XCTAssertTrue(editTitleLabel.exists)
+        editTitleLabel.tap()
+        let currentValue = editTitleLabel.value as? String ?? ""
+        let deleteString = String(repeating: XCUIKeyboardKey.delete.rawValue, count: currentValue.count)
+        editTitleLabel.typeText(deleteString)
+        editTitleLabel.typeText("Other title for test")
+        XCTAssertEqual(editTitleLabel.value as? String, "Other title for test")
         
-        var titleView = app.otherElements["titleLabel"]
-//        XCTAssertNotNil(titleView.value)
-        XCTAssertTrue(titleView.exists)
+        var editDescriptionTextView = app.textViews["editDescriptionTextView"]
+        XCTAssertNotNil(editDescriptionTextView.value)
+        XCTAssertTrue(editDescriptionTextView.exists)
+        editDescriptionTextView.swipeDown()
+        editDescriptionTextView = app.textViews["editDescriptionTextView"]
+        XCTAssertTrue(editDescriptionTextView.exists)
+    }
+    
+    func testEditTitleDescriptionPage() {
+        let app = XCUIApplication()
+        app.launch()
+        var historyPage = app.navigationBars["History"].exists
+        XCTAssertTrue(historyPage)
+        let firstCell = app.tables["tableView"].cells.element(boundBy: 0)
+        firstCell.swipeLeft()
+        let editButton = firstCell.buttons["Edit"]
+        editButton.tap()
         
-        detailsView.swipeDown()
-        detailsView = app.otherElements["detailsView"]
-        XCTAssertFalse(detailsView.exists)
+        let editTitleLabel = app.textFields["editTitleLabel"]
+        editTitleLabel.tap()
+        let currentValue = editTitleLabel.value as? String ?? ""
+        let deleteString = String(repeating: XCUIKeyboardKey.delete.rawValue, count: currentValue.count)
+        editTitleLabel.typeText(deleteString)
+        editTitleLabel.typeText("Other title for test")
+        
+        let imageView = app.images["editImageView"]
+        XCTAssertTrue(imageView.exists, "image view should exist")
+        imageView.tap()
+        
+        let saveButton = app.buttons["saveBtn"]
+        saveButton.tap()
+        
+        historyPage = app.navigationBars["History"].exists
+        XCTAssertTrue(historyPage)
+    }
+    
+    func testAddPage() {
+        let app = XCUIApplication()
+        app.navigationBars["History"].buttons["Add"].tap()
+        let saveButton = app.buttons["saveBtn"]
+        XCTAssertTrue(saveButton.exists, "Save button should exist")
+        saveButton.tap()
+        let warningAlert = app.alerts["Save entry"]
+        XCTAssertTrue(warningAlert.exists)
     }
 
     @MainActor

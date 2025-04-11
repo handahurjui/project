@@ -23,7 +23,7 @@
                                     <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="mtv-gC-hxV">
                                         <rect key="frame" x="0.0" y="0.0" width="393" height="300"/>
                                         <color key="backgroundColor" systemColor="groupTableViewBackgroundColor"/>
-                                        <accessibility key="accessibilityConfiguration" identifier="imageTitleLabel" label="imageTitleLabel">
+                                        <accessibility key="accessibilityConfiguration" identifier="editImageView" label="editImageView">
                                             <bool key="isElement" value="YES"/>
                                         </accessibility>
                                         <constraints>
@@ -55,6 +55,7 @@
                                         <subviews>
                                             <button opaque="NO" contentMode="scaleToFill" verticalCompressionResistancePriority="751" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="gzA-8a-Dqr" userLabel="Save Btn">
                                                 <rect key="frame" x="0.0" y="0.0" width="393" height="34.333333333333336"/>
+                                                <accessibility key="accessibilityConfiguration" identifier="saveBtn" label="saveBtn"/>
                                                 <constraints>
                                                     <constraint firstAttribute="height" constant="50" id="C0H-6i-hhL"/>
                                                 </constraints>
