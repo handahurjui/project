@@ -8,7 +8,7 @@
 import UIKit
 
 protocol ScanCoordinatorDelegate {
-    func popVC()
+    func didFinishAddingItem()
 }
 
 class ScanCoordinator: Coordinator {
@@ -32,7 +32,7 @@ class ScanCoordinator: Coordinator {
     }
 }
 extension ScanCoordinator: ScanCoordinatorDelegate {
-    func popVC() {
+    func didFinishAddingItem() {
         if let changeTab = didFinishAddingFlow {
             changeTab()
         }

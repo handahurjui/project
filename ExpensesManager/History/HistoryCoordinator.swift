@@ -11,7 +11,10 @@ protocol HistoryCoordinatorDelegate {
     func goToDetailsPage(expenseDataView: ExpenseDataView)
     func goToAddNewItem(controller: UIViewController)
     func goToEditVC(managedObject: ExpenseContainerProtocol, controller: UIViewController)
-    func popVC()
+}
+
+protocol EditViewCoordinatorDelegate {
+    func goBackToExpensesHistory()
 }
 
 class HistoryCoordinator: Coordinator {
@@ -57,8 +60,10 @@ extension HistoryCoordinator: HistoryCoordinatorDelegate {
         vc.expenseDataView = expenseDataView
         rootNavigationController.pushViewController(vc, animated: true)
     }
-    
-    func popVC() {
+}
+
+extension HistoryCoordinator: EditViewCoordinatorDelegate {
+    func goBackToExpensesHistory() {
         rootNavigationController.popViewController(animated: true)
     }
 }

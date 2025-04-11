@@ -60,7 +60,7 @@ class HistoryViewModel {
 
 extension HistoryViewModel {
     // Data Source
-    func numberOfRows() -> Int { return managedObjects!.count }
+    func numberOfRows() -> Int { return managedObjects?.count ?? 0}
     
     func cellDataFor(row: Int) -> ExpenseDataView {
         return  managedObjects![row].expenseDataView!
@@ -68,15 +68,31 @@ extension HistoryViewModel {
     // Delegate events
     func didSelectRow(_ row: Int) {
         let item =  managedObjects![row].expenseDataView!
-        coordinator?.goToDetailsPage(expenseDataView: item)
+        goToDetailsPage(expenseDataView: item)
     }
     
     func addBtnTapped(controller: UIViewController) {
-        coordinator?.goToAddNewItem(controller: controller)
+        goToAddNewItem(controller: controller)
     }
     
     func editBtnTapped(row: IndexPath, controller: UIViewController) {
         let item = managedObjects![row.row]
-        coordinator?.goToEditVC(managedObject: item, controller: controller)
+        goToEditVC(managedObject: item, controller: controller)
     }
+}
+
+extension HistoryViewModel: HistoryCoordinatorDelegate {
+    func goToDetailsPage(expenseDataView: ExpenseDataView) {
+        coordinator?.goToDetailsPage(expenseDataView: expenseDataView)
+    }
+    
+    func goToAddNewItem(controller: UIViewController) {
+        coordinator?.goToAddNewItem(controller: controller)
+    }
+    
+    func goToEditVC(managedObject: ExpenseContainerProtocol, controller: UIViewController) {
+        coordinator?.goToEditVC(managedObject: managedObject, controller: controller)
+    }
+    
+    
 }

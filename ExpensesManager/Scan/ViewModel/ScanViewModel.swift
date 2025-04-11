@@ -19,7 +19,7 @@ class ScanViewModel {
         storage.saveEntry(object: expense) { result in
             switch result {
             case .success(_):
-                self.coodinator?.popVC()
+                self.coodinator?.didFinishAddingItem()
             case .failure(_):
                 print("Clould not save")
             }

@@ -12,7 +12,7 @@ class EditViewModel {
     
     // MARK: Properties
     private var storage: Storage
-    var coordinator: HistoryCoordinatorDelegate?
+    var coordinator: EditViewCoordinatorDelegate?
     var delegate: EditViewModelDelegate?
     
     init(storage: Storage) {
@@ -25,11 +25,17 @@ extension EditViewModel {
         storage.update(object: expenseContainer) { [weak self] (result) in
             switch result {
             case .success:
-                self?.coordinator?.popVC()
+                self?.goBackToExpensesHistory()
             case .failure(let error):
                 self?.delegate?.showError(errorMessage: error.localizedDescription)
             }
         }
     }
     
+}
+
+extension EditViewModel: EditViewCoordinatorDelegate {
+    func goBackToExpensesHistory() {
+        self.coordinator?.goBackToExpensesHistory()
+    }
 }
