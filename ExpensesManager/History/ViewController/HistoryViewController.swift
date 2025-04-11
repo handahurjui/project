@@ -22,7 +22,7 @@ class HistoryViewController: UIViewController, Storyboarded {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        viewModel.loadExpenses()
+        viewModel.loadAndRefresh()
     }
     
     override func viewDidLoad() {

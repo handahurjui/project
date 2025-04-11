@@ -34,6 +34,9 @@ class TabBarCoordinator: Coordinator {
         historyCoordinator.didTappedAddNewItemFlow = {
             tabBarController.selectedIndex = 1
         }
+        scanCoordinator.didFinishAddingFlow = {
+            tabBarController.selectedIndex = 0
+        }
         scanCoordinator.start()
         historyCoordinator.start()
     }

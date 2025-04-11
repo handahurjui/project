@@ -9,6 +9,7 @@ import Foundation
 
 class ScanViewModel {
     var storage: Storage
+    var coodinator: ScanCoordinatorDelegate?
     
     init(storage: Storage) {
         self.storage = storage
@@ -18,7 +19,7 @@ class ScanViewModel {
         storage.saveEntry(object: expense) { result in
             switch result {
             case .success(_):
-                print("Successful saved")
+                self.coodinator?.popVC()
             case .failure(_):
                 print("Clould not save")
             }

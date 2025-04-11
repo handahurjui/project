@@ -16,7 +16,7 @@ class HistoryViewModel {
         
     // MARK: Properties
     var storage: Storage
-    private var managedObjects: [ExpenseContainer]? {
+    private var managedObjects: [ExpenseContainerProtocol]? {
         didSet {
             viewDelegate?.refreshScreen()
         }
@@ -26,6 +26,11 @@ class HistoryViewModel {
     
     init(storage: Storage) {
         self.storage = storage
+    }
+    
+    func loadAndRefresh() {
+        self.loadExpenses()
+        self.viewDelegate?.refreshScreen()
     }
     
     func loadExpenses() {
@@ -45,8 +50,7 @@ class HistoryViewModel {
         storage.detele(object: item) { [weak self] (result) in
             switch result {
             case .success:
-                self?.loadExpenses()
-                self?.viewDelegate?.refreshScreen()
+                self?.loadAndRefresh()
             case .failure(let error):
                 self?.viewDelegate?.showError(errorMessage: error.localizedDescription)
             }

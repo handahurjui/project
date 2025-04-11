@@ -53,10 +53,6 @@ final class CoreDataTests: XCTestCase {
             XCTFail("Could not load test image")
             return []
         }
-        guard let imageData = try? Data(contentsOf: url) else {
-            XCTFail("Failed to load image data")
-            return []
-        }
         let expense1 = ExpenseModel(id: UUID(uuidString: "1"), title: "title 1", descriptionData: "description 1", createdDate: Date(), image: imageData)
         let expense2 = ExpenseModel(id: UUID(uuidString: "2"), title: "title 2", descriptionData: "description 2", createdDate: Date(), image: imageData)
         let expense3 = ExpenseModel(id: UUID(uuidString: "3"), title: "title 3", descriptionData: "description 3", createdDate: Date(), image: imageData)
