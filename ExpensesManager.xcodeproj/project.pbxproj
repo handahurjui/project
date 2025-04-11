@@ -30,6 +30,20 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		5F9A56E72DA8EB82005C014D /* Exceptions for "ExpensesManagerTests" folder in "ExpensesManager" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				imageTest.jpg,
+			);
+			target = CD73B4692DA2FBD30033465A /* ExpensesManager */;
+		};
+		5F9A56E82DA8EB82005C014D /* Exceptions for "ExpensesManagerTests" folder in "ExpensesManagerUITests" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				imageTest.jpg,
+			);
+			target = CD73B48C2DA2FBD60033465A /* ExpensesManagerUITests */;
+		};
 		CD73B4952DA2FBD60033465A /* Exceptions for "ExpensesManager" folder in "ExpensesManager" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
@@ -50,6 +64,10 @@
 		};
 		CD73B4862DA2FBD60033465A /* ExpensesManagerTests */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				5F9A56E72DA8EB82005C014D /* Exceptions for "ExpensesManagerTests" folder in "ExpensesManager" target */,
+				5F9A56E82DA8EB82005C014D /* Exceptions for "ExpensesManagerTests" folder in "ExpensesManagerUITests" target */,
+			);
 			path = ExpensesManagerTests;
 			sourceTree = "<group>";
 		};
